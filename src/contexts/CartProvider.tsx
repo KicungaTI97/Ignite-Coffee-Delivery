@@ -1,84 +1,84 @@
-import { createContext, ReactNode, useEffect, useReducer } from "react"
-import { useNavigate } from "react-router-dom"
+import { createContext, ReactNode, useEffect, useReducer } from 'react'
 
 import {
-    addItemAction,
-    checkoutCartAction,
-    decrementItemQuantityAction,
-    incrementItemQuantityAction,
-    removeItemAction,
-  } from '../reducers/cart/actions'
-import { cartReducer, Item, Order } from "../reducers/cart/reducers"
-import { OrderInfo } from "../Pages/Cart"
+  addItemAction,
+  checkoutCartAction,
+  decrementItemQuantityAction,
+  incrementItemQuantityAction,
+  removeItemAction,
+} from '../reducers/cart/actions'
+import { cartReducer, Item, Order } from '../reducers/cart/reducers'
+import { OrderInfo } from '../Pages/Cart'
+import { useNavigate } from 'react-router-dom'
 
-
-interface CartContextType{
-    cart: Item[]
-    orders: Order[]
-    addItem: (item: Item) => void
-    removeItem: (itemId: Item['id']) => void
-    decrementItemQuantity: (itemId: Item['id']) => void
-    incrementItemQuantity: (itemId: Item['id']) => void
-    checkout: (order: OrderInfo) => void
+interface CartContextType {
+  cart: Item[] //Lista de itens no carrinho
+  orders: Order[] //Lista de de pedidos no carrinho
+  addItem: (item: Item) => void
+  removeItem: (itemId: Item['id']) => void
+  decrementItemQuantity: (itemId: Item['id']) => void
+  incrementItemQuantity: (itemId: Item['id']) => void
+  checkout: (order: OrderInfo) => void
 }
-export const CartContext = createContext({} as CartContextType )
 
-interface CartContextProvideProps{
-    children: ReactNode
-} 
-export function CartContextProvider({children}: CartContextProvideProps){
-    const [cartState, dispatch] = useReducer(
-        cartReducer,
-        {
-            cart:[],
-            orders: [],
-        },
-        (cartState) =>{
-            const storedStateAsJSON = localStorage.getItem(
-                '@coffee-delivery:cart-state-1.0.0',
-            )
+export const CartContext = createContext({} as CartContextType)
 
-            if(storedStateAsJSON){
-                return JSON.parse(storedStateAsJSON)
-            }
+interface CartContextProviderProps {
+  children: ReactNode
+}
 
-            return cartState
-        },
-    )
+export function CartContextProvider({ children }: CartContextProviderProps) {
+  const [cartState, dispatch] = useReducer(
+    cartReducer,
+    {
+      cart: [],
+      orders: [],
+    },
+    (cartState) => {
+      const storedStateAsJSON = localStorage.getItem(
+        '@coffee-delivery:cart-state-1.0.0',
+      )
 
-    const navigate = useNavigate()
+      if (storedStateAsJSON) {
+        return JSON.parse(storedStateAsJSON)
+      }
 
-    const {cart, orders} = cartState
-    
-    function addItem(item: Item){
-        dispatch(addItemAction(item))
+      return cartState
+    },
+  )
+  const navigate = useNavigate()
+
+  const { cart, orders } = cartState
+
+  function addItem(item: Item) {
+    dispatch(addItemAction(item))
+  }
+
+  function removeItem(itemId: Item['id']) {
+    dispatch(removeItemAction(itemId))
+  }
+
+  function checkout(order: OrderInfo) {
+    dispatch(checkoutCartAction(order, navigate))
+  }
+
+  function incrementItemQuantity(itemId: Item['id']) {
+    dispatch(incrementItemQuantityAction(itemId))
+  }
+
+  function decrementItemQuantity(itemId: Item['id']) {
+    dispatch(decrementItemQuantityAction(itemId))
+  }
+
+  useEffect(() => {
+    if (cartState) {
+      const stateJSON = JSON.stringify(cartState)
+
+      localStorage.setItem('@coffee-delivery:cart-state-1.0.0', stateJSON)
     }
+  }, [cartState])
 
-    function removeItem(ItemId: Item['id']){
-        dispatch(removeItemAction(ItemId))
-    }
-
-    function checkout(order: OrderInfo){
-        dispatch(checkoutCartAction(order, navigate))
-    }
-
-    function incrementItemQuantity(itemId: Item['id']){
-        dispatch(incrementItemQuantityAction(itemId))
-    }
-
-    function decrementItemQuantity(itemId:Item['id']){
-        dispatch(decrementItemQuantityAction(itemId))
-    }
-
-    useEffect(() => {
-        if(cartState){
-            const stateJSON = JSON.stringify(cartState)
-
-            localStorage.setItem('@coffe-delivery:cart-state-1.0.0', stateJSON)
-        }
-    })
-
-    return(
+  return (
     <CartContext.Provider
       value={{
         addItem,
@@ -90,7 +90,7 @@ export function CartContextProvider({children}: CartContextProvideProps){
         checkout,
       }}
     >
-    {children}
+      {children}
     </CartContext.Provider>
-    )
+  )
 }

@@ -87,8 +87,10 @@ const coffeesInCart = cart.map((item) => {
   }
 })
 
-const totalItemsPrice = coffeesInCart.reduce((previousValue, currentItem) =>{
-  return (previousValue += currentItem.price * currentItem.quantity)
+const totalItemsPrice = coffeesInCart.reduce((totalPrice, currentItem) =>{
+  const {price, quantity} = currentItem
+  return totalPrice + price * quantity 
+  
 },0)
 
 const {
@@ -256,7 +258,7 @@ const handleOrderCheckout: SubmitHandler<FormInputs> = (data) =>{
                       />
 
                       <button onClick={() => handleItemRemove(coffee.id)}>
-                        <Trash />
+                        <Trash size={18}/>
                         <span>Remover</span>
                       </button>
                     </CoffeeInfo>

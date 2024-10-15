@@ -9,7 +9,7 @@ export interface Item{
 
 export interface Order extends OrderInfo{
     id: number
-    items: Order[]
+    items: Item[]
 }
 
 interface CartState{
@@ -32,6 +32,14 @@ export function cartReducer(state: CartState, action: Actions)
                 draft.cart.push(action.payload.item)
             }
     })
+        case ActionTypes.REMOVE_ITEM:
+            return produce(state,(draft) =>{
+                const itemRemoveId = draft.cart.findIndex(
+                    (item) => item.id === action.payload.itemId,
+                )
+                draft.cart.splice(itemRemoveId, 1)
+            })
+
 
         case ActionTypes.INCREMENT_ITEM_QUANTITY: 
             return produce(state, (draft) => {
@@ -64,7 +72,7 @@ export function cartReducer(state: CartState, action: Actions)
                 draft.orders.push(newOrder)
                 draft.cart = []
 
-                action.payload.callback(`/order/${newOrder.id}/sucess`)
+                action.payload.callback(`/order/${newOrder.id}/success`)
             })
 
             default:

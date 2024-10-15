@@ -8,7 +8,7 @@ import { Header } from "./components/Header"
 
 
 
-function App() {
+export function App() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -22,4 +22,3 @@ function App() {
   )
 }
 
-export default App

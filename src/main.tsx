@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { Home } from './Pages/Home'
 import { Cart } from './Pages/Cart'
 import { Success } from './Pages/Success'
+import { App } from './App'
 
 
 const router = createBrowserRouter([
@@ -21,11 +21,11 @@ const router = createBrowserRouter([
         path: '/cart',
         element: <Cart />
       },{
-        path: '/order/:orderId/sucess',
+        path: '/order/:orderId/success',
         element: <Success />
-      }
-    ]
-  } 
+      },
+    ],
+  }, 
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

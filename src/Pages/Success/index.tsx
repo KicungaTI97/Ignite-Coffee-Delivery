@@ -1,91 +1,83 @@
-import { CurrencyDollar, MapPin, Timer } from "@phosphor-icons/react"
-import { useTheme } from "styled-components"
-import { useParams } from "react-router-dom"
+import { CurrencyDollar, MapPin, Timer } from "@phosphor-icons/react";
+import { useTheme } from "styled-components";
+import { useParams } from "react-router-dom";
 
-import { useCart } from "../../hooks/useCart"
-import { Container, Heading, Info, InfoContent, Order } from "./style"
-export function Success(){
-    const { orders } = useCart()
-    const { orderID } = useParams()
-    const orderInfo = orders.find((order) => order.id === Number(orderID))
+import { useCart } from "../../hooks/useCart";
+import { Container, Heading, Info, InfoContent, Order } from "./style";
 
-    const paymentMethod = {
-        credit: 'Cartão de Crédito',
-        debit: 'Cartão de Débito',
-        cash: 'Dinheiro',
-    }
-    
-    const theme = useTheme()
+export function Success() {
+  const { orders } = useCart();
+  const { orderId } = useParams();
+  const orderInfo = orders.find((order) => order.id === Number(orderId));
 
-    if(!orderInfo?.id){
-        return null
-    }
+  const paymentMethod = {
+    credit: "Cartão de Crédito",
+    debit: "Cartão de Débito",
+    cash: "Dinheiro",
+  };
 
-    return(
-        <Container>
-            <Order>
-                <Heading>
-                    <h2>Uhu! Pedido confirmado</h2>
-                    <span>Agora é só agauardar que logo o café chegará até você</span>
-                </Heading>
+  const theme = useTheme();
+  
 
-                <Info>
-                    <InfoContent>
-                        <div>
-                            <MapPin 
-                                color={theme.color.white}
-                                style={{backgroundColor: theme.color.purple}}
-                                size={32}
-                            />
-                            <div>
-                                <span>
-                                    Entrega em {' '}
-                                    <strong>
-                                        {orderInfo.street}, {orderInfo.number}
-                                    </strong>
-                                </span>
+  console.log(orders)
+  console.log(`segundo ID${orderId}`)
+  if (!orderInfo?.id) {
+    return null;
+  }
 
-                                <span>
-                                    {orderInfo.neighborhood}, {orderInfo.city}, {orderInfo.state}
-                                </span>
-                            </div>
-                        </div>
+  return (
+    <Container>
+      <Order>
+        <Heading>
+          <h2>Uhu! Pedido confirmado</h2>
+          <span>Agora é só aguardar que logo o café chegará até você</span>
+        </Heading>
 
-                        <div>
-                            <Timer 
-                                color={theme.colors.white}
-                                style={{backgroundColor: theme.colors.yellow}}
-                                size={32}
-                            />
+        <Info>
+          <InfoContent>
+            <div>
+              <MapPin
+                color={theme.colors.white}
+                style={{ backgroundColor: theme.colors.purple }}
+                size={32}
+              />
+              <div>
+                <span>
+                  Entrega em<strong>{orderInfo.street}, {orderInfo.number}</strong>
+                </span>
+                <span>
+                  {orderInfo.neighborhood}, {orderInfo.city}, {orderInfo.state}
+                </span>
+              </div>
+            </div>
 
-                            <div>
-                                <span>Previsão de entrega</span>
+            <div>
+              <Timer
+                color={theme.colors.white}
+                style={{ backgroundColor: theme.colors.yellow }}
+                size={32}
+              />
+              <div>
+                <span>Previsão de entrega</span>
+                <strong>20 min - 30 min</strong>
+              </div>
+            </div>
 
-                                <strong>20 min - 30 min</strong>
-                            </div>
-                        </div>
-
-                        <div>
-                            <CurrencyDollar 
-                                color={theme.colors.white}
-                                style={{backgroundColor: theme.colors['yellow-dark']}}
-                                size={32}
-                            />
-
-                            <div>
-                                <span>Pagamento na entrega</span>
-
-                                <strong>{paymentMethod[orderInfo.paymentMethod]}</strong>
-                            </div>
-                        </div>
-                    </InfoContent>
-                </Info>
-            </Order>
-            <img src="/images/delivery.svg" alt="Pedido concluido" />
-        </Container>
-    )
+            <div>
+              <CurrencyDollar
+                color={theme.colors.white}
+                style={{ backgroundColor: theme.colors["yellow-dark"] }}
+                size={32}
+              />
+              <div>
+                <span>Pagamento na entrega</span>
+                <strong>{paymentMethod[orderInfo.paymentMethod]}</strong>
+              </div>
+            </div>
+          </InfoContent>
+        </Info>
+      </Order>
+      <img src="/images/delivery.svg" alt="Pedido concluído" />
+    </Container>
+  );
 }
-
-
-
-

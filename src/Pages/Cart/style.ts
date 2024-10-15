@@ -131,6 +131,7 @@ export const CoffeeInfo = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
+    border: 0;
 
     transition: all 0.2s;
 
@@ -197,6 +198,7 @@ export const CheckoutButton = styled.button`
   width: 100%;
   padding: 12px;
   text-transform: uppercase;
+  border: 0;
 
   ${mixins.fonts.buttonG};
   color: ${({ theme }) => theme.colors.white};
