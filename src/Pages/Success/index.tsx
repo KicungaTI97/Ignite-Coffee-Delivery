@@ -19,8 +19,6 @@ export function Success() {
   const theme = useTheme();
   
 
-  console.log(orders)
-  console.log(`segundo ID${orderId}`)
   if (!orderInfo?.id) {
     return null;
   }
